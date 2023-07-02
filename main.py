@@ -13,7 +13,9 @@ def getInfo():
     try:
         ytLink = link.get()
         ytObject = YouTube(ytLink)
-        videoTitle.configure(text=ytObject.title, text_color="white")
+        videoTitle.configure(text= "Title: " + ytObject.author + " - " + ytObject.title, text_color="white")
+        videoTime.configure(text="Time: " + str(ytObject.length//60) + ":" + str(ytObject.length%60), text_color="white")
+        videoMem.configure(text="Size: " + "{:.2f}".format(ytObject.streams.get_highest_resolution().filesize/1024/1024) + " MB")
         downloadThumb()
         check = True
         while check:
@@ -97,13 +99,21 @@ link.pack()
 info = customtkinter.CTkButton(app,text="Get info", command=getInfo)
 info.pack(padx=10, pady=10)
 
+#Picture
+img = customtkinter.CTkLabel(app, text='')
+img.pack(padx=10, pady=10)
+
 #videoTitle
 videoTitle = customtkinter.CTkLabel(app, text="")
 videoTitle.pack(padx=10, pady=10)
 
-#Picture
-img = customtkinter.CTkLabel(app, text='')
-img.pack(padx=10, pady=10)
+#videoTime
+videoTime = customtkinter.CTkLabel(app, text="")
+videoTime.pack(padx=10, pady=10)
+
+#videoMemory
+videoMem = customtkinter.CTkLabel(app, text="")
+videoMem.pack(padx=10, pady=10)
 
 #Download button
 download = customtkinter.CTkButton(app,text="Get video", command=download)
