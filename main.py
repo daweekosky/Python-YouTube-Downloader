@@ -26,7 +26,7 @@ def getInfo():
                 img.configure(image=photo)
     except:
         print("YouTube link is invalid")
-        videoTitle.configure(text="Wystąpił bład, sprawdź poprawność linku", text_color="red")
+        videoTitle.configure(text="An error occurred, please check the correctness of the link", text_color="red")
 
 def downloadThumb():
     try:
@@ -37,7 +37,7 @@ def downloadThumb():
         print("Download Complete!")
     except:
         print("YouTube link is invalid")
-        finishLabel.configure(text="Wystąpił bład, sprawdź poprawność linku", text_color="red")
+        finishLabel.configure(text="An error occurred, please check the correctness of the link", text_color="red")
 
 def downloadImage(url, filename):
     response = requests.get(url)
@@ -57,10 +57,10 @@ def startDownload():
         finishLabel.configure(text="")
         video.download()
         print("Download Complete!")
-        finishLabel.configure(text="Pobrano plik", text_color="white")
+        finishLabel.configure(text="Video downloaded", text_color="white")
     except:
         print("YouTube link is invalid")
-        finishLabel.configure(text="Wystąpił bład, sprawdź poprawność linku", text_color="red")
+        finishLabel.configure(text="An error occurred, please check the correctness of the link", text_color="red")
 
 def on_progress(stream, chunk, bytes_remaining):
     total_size = stream.filesize
@@ -85,7 +85,7 @@ app.geometry("720x720")
 app.title("YouTube Downloader")
 
 #Adding UI Elements
-title = customtkinter.CTkLabel(app, text="Podaj link")
+title = customtkinter.CTkLabel(app, text="Insert link")
 title.pack(padx=10, pady=10)
 
 #Add link input
@@ -94,7 +94,7 @@ link = customtkinter.CTkEntry(app, width=350, height=40, textvariable=url_var)
 link.pack()
 
 #Info button
-info = customtkinter.CTkButton(app,text="Pobierz info", command=getInfo)
+info = customtkinter.CTkButton(app,text="Get info", command=getInfo)
 info.pack(padx=10, pady=10)
 
 #videoTitle
@@ -106,7 +106,7 @@ img = customtkinter.CTkLabel(app, text='')
 img.pack(padx=10, pady=10)
 
 #Download button
-download = customtkinter.CTkButton(app,text="Pobierz plik", command=download)
+download = customtkinter.CTkButton(app,text="Get video", command=download)
 download.pack(padx=10, pady=10)
 
 
