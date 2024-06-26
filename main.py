@@ -6,8 +6,14 @@ import requests, shutil
 import atexit
 import os
 import threading
-import time
+import platform
 
+
+def get_download_path():
+    if platform.system() == "Windows":
+        return os.path.join(os.getenv('USERPROFILE'), 'Downloads')
+    else:
+        return os.path.join(os.path.expanduser('~'), 'Downloads')
 
 def getInfo():
     try:
@@ -35,7 +41,7 @@ def downloadThumb():
         ytLink = link.get()
         ytObject = YouTube(ytLink)
         thumbnail_url = ytObject.thumbnail_url
-        downloadImage(thumbnail_url,"thumbnail.jpg")
+        downloadImage(thumbnail_url, "thumbnail.jpg")
         print("Download Complete!")
     except:
         print("YouTube link is invalid")
@@ -57,7 +63,8 @@ def startDownload():
         video = ytObject.streams.get_highest_resolution()
         videoTitle.configure(text=ytObject.title, text_color="white")
         finishLabel.configure(text="")
-        video.download()
+        download_path = get_download_path()
+        video.download(output_path=download_path)
         print("Download Complete!")
         finishLabel.configure(text="Video downloaded", text_color="white")
     except:
@@ -77,63 +84,62 @@ def on_progress(stream, chunk, bytes_remaining):
 def download():
     download_thread = threading.Thread(target=startDownload)
     download_thread.start()
-#System settings
+
+# System settings
 customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("blue")
 
-#App frame
+# App frame
 app = customtkinter.CTk()
 app.geometry("720x720")
 app.title("YouTube Downloader")
 
-#Adding UI Elements
+# Adding UI Elements
 title = customtkinter.CTkLabel(app, text="Insert link")
 title.pack(padx=10, pady=10)
 
-#Add link input
+# Add link input
 url_var = StringVar()
 link = customtkinter.CTkEntry(app, width=350, height=40, textvariable=url_var)
 link.pack()
 
-#Info button
-info = customtkinter.CTkButton(app,text="Get info", command=getInfo)
+# Info button
+info = customtkinter.CTkButton(app, text="Get info", command=getInfo)
 info.pack(padx=10, pady=10)
 
-#Picture
+# Picture
 img = customtkinter.CTkLabel(app, text='')
 img.pack(padx=10, pady=10)
 
-#videoTitle
+# videoTitle
 videoTitle = customtkinter.CTkLabel(app, text="")
 videoTitle.pack(padx=10, pady=10)
 
-#videoTime
+# videoTime
 videoTime = customtkinter.CTkLabel(app, text="")
 videoTime.pack(padx=10, pady=10)
 
-#videoMemory
+# videoMemory
 videoMem = customtkinter.CTkLabel(app, text="")
 videoMem.pack(padx=10, pady=10)
 
-#Download button
-download = customtkinter.CTkButton(app,text="Get video", command=download)
+# Download button
+download = customtkinter.CTkButton(app, text="Get video", command=download)
 download.pack(padx=10, pady=10)
 
-
-#Finished downloading
+# Finished downloading
 finishLabel = customtkinter.CTkLabel(app, text="")
 finishLabel.pack(padx=10, pady=10)
 
-#Progress %
+# Progress %
 pPercentage = customtkinter.CTkLabel(app, text="0%")
 pPercentage.pack()
 
-progressBar = customtkinter.CTkProgressBar(app,width=400)
+progressBar = customtkinter.CTkProgressBar(app, width=400)
 progressBar.set(0)
 progressBar.pack(padx=10, pady=10)
 
-
-#Run app in loop
+# Run app in loop
 app.mainloop()
 
 atexit.register(delete_file, "thumbnail.jpg")
